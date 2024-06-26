@@ -13,4 +13,8 @@ contract ElectoralBond {
         s_partyToWalletMap[partyName] = changedWalletAddress;
     }
 
+    function getWalletAddress(string memory partyName) public view returns (address) {
+        return s_partyToWalletMap[partyName];
+    }
+
 }
