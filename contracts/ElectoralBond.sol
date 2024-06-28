@@ -20,9 +20,8 @@ contract ElectoralBond {
     function registerUser(string memory name) public {
         require(!users[msg.sender].isRegistered, "User already registered");
         users[msg.sender] = User(name, true);
-        emit UserRegistered(msg.sender, name);
     }
-    
+
     function mapAddress (string memory partyName, address waletAddress) public {
         s_partyToWalletMap[partyName] = waletAddress;
     }
