@@ -22,6 +22,20 @@ contract ElectoralBond {
         users[msg.sender] = User(name, true);
     }
 
+    function purchaseBond() public payable onlyRegisteredUser {
+        require(msg.value > 0, "You need to send some Ether");
+        userBalances[msg.sender] += msg.value;
+    }
+
+    function transferBond(string memory partyName, uint amount) public onlyRegisteredUser {
+        address to = s_partyToWalletMap[partyName];
+        require(to != address(0), "Party not registered");
+        require(userBalances[msg.sender] >= amount, "Insufficient balance");
+
+        userBalances[msg.sender] -= amount;
+        payable(to).transfer(amount);
+    }
+
     function mapAddress (string memory partyName, address waletAddress) public {
         s_partyToWalletMap[partyName] = waletAddress;
     }
