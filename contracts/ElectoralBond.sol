@@ -2,32 +2,15 @@
 pragma solidity ^0.8.7;
 
 contract ElectoralBond {
-
-    struct User {
-        string name;
-        bool isRegistered;
-    }
-
-    mapping(address => User) private users;
     mapping (string => address) private s_partyToWalletMap;
     mapping(address => uint) private userBalances;
 
-    modifier onlyRegisteredUser() {
-        require(users[msg.sender].isRegistered, "User not registered");
-        _;
-    }
-
-    function registerUser(string memory name) public {
-        require(!users[msg.sender].isRegistered, "User already registered");
-        users[msg.sender] = User(name, true);
-    }
-
-    function purchaseBond() public payable onlyRegisteredUser {
+    function purchaseBond() public  {
         require(msg.value > 0, "You need to send some Ether");
         userBalances[msg.sender] += msg.value;
     }
 
-    function transferBond(string memory partyName, uint amount) public onlyRegisteredUser {
+    function transferBond(string memory partyName, uint amount) public {
         address to = s_partyToWalletMap[partyName];
         require(to != address(0), "Party not registered");
         require(userBalances[msg.sender] >= amount, "Insufficient balance");
