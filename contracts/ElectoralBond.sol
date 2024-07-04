@@ -3,20 +3,14 @@ pragma solidity ^0.8.7;
 
 contract ElectoralBond {
     mapping (string => address) private s_partyToWalletMap;
-    mapping(address => uint) private userBalances;
+    mapping (string => uint) private s_partyBalances;
 
-    function purchaseBond() public  {
-        require(msg.value > 0, "You need to send some Ether");
-        userBalances[msg.sender] += msg.value;
-    }
-
-    function transferBond(string memory partyName, uint amount) public {
+    function transferBond(string memory partyName) public payable { // bond is ether 
         address to = s_partyToWalletMap[partyName];
         require(to != address(0), "Party not registered");
-        require(userBalances[msg.sender] >= amount, "Insufficient balance");
+        require(msg.value > 0, "You need to send some Ether");
 
-        userBalances[msg.sender] -= amount;
-        payable(to).transfer(amount);
+        payable(to).transfer(msg.value);
     }
 
     function mapAddress (string memory partyName, address waletAddress) public {
@@ -29,6 +23,10 @@ contract ElectoralBond {
 
     function getWalletAddress(string memory partyName) public view returns (address) {
         return s_partyToWalletMap[partyName];
+    }
+
+    function getPartyBalance(string memory partyName) public view returns (uint) {
+        return s_partyBalances[partyName];
     }
 
 }
