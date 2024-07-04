@@ -5,16 +5,17 @@ contract ElectoralBond {
     mapping (string => address) private s_partyToWalletMap;
     mapping (string => uint) private s_partyBalances;
 
-    function transferBond(string memory partyName) public payable { // bond is ether 
+    function transferBond(string memory partyName, uint amount) public payable {
         address to = s_partyToWalletMap[partyName];
         require(to != address(0), "Party not registered");
-        require(msg.value > 0, "You need to send some Ether");
+        require(msg.value >= amount && amount > 0, "Insufficient or zero Ether sent");
 
-        payable(to).transfer(msg.value);
+        s_partyBalances[partyName] += amount;
+        payable(to).transfer(amount);
     }
 
-    function mapAddress (string memory partyName, address waletAddress) public {
-        s_partyToWalletMap[partyName] = waletAddress;
+    function mapAddress (string memory partyName, address walletAddress) public {
+        s_partyToWalletMap[partyName] = walletAddress;
     }
 
     function changeWalletAddress (string memory partyName, address changedWalletAddress) public {
@@ -28,5 +29,4 @@ contract ElectoralBond {
     function getPartyBalance(string memory partyName) public view returns (uint) {
         return s_partyBalances[partyName];
     }
-
 }
