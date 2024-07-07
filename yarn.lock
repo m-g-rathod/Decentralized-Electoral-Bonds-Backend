@@ -533,7 +533,7 @@
     deep-eql "^4.0.1"
     ordinal "^1.0.3"
 
-"@nomicfoundation/hardhat-ethers@^3.0.0":
+"@nomicfoundation/hardhat-ethers@^3.0.6":
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/@nomicfoundation/hardhat-ethers/-/hardhat-ethers-3.0.6.tgz#e8ba7f9719de360c03501b85dae4999bb3a7e1c5"
   integrity sha512-/xzkFQAaHQhmIAYOQmvHBPwL+NkwLzT9gRZBsgWUYeV+E6pzXsBQsHfRYbAZ3XEYare+T7S+5Tg/1KDJgepSkA==
@@ -1818,7 +1818,7 @@ ethers@^5.7.0, ethers@^5.7.2, ethers@~5.7.0:
     "@ethersproject/web" "5.7.1"
     "@ethersproject/wordlists" "5.7.0"
 
-ethers@^6.4.0, ethers@^6.7.0:
+ethers@^6.13.1, ethers@^6.7.0:
   version "6.13.1"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-6.13.1.tgz#2b9f9c7455cde9d38b30fe6589972eb083652961"
   integrity sha512-hdJ2HOxg/xx97Lm9HdCWk949BfYqYWpyw4//78SiwOLgASyfrNszfMUNB2joKjvGUdwhHfaiMMFFwacVVoLR9A==

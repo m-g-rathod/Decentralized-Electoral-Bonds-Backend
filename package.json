@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
-    "@nomicfoundation/hardhat-ethers": "^3.0.0",
+    "@nomicfoundation/hardhat-ethers": "^3.0.6",
     "@nomicfoundation/hardhat-ignition": "^0.15.0",
     "@nomicfoundation/hardhat-ignition-ethers": "^0.15.0",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
@@ -11,7 +11,7 @@
     "@typechain/hardhat": "^9.0.0",
     "chai": "^4.2.0",
     "dotenv": "^16.4.5",
-    "ethers": "^6.4.0",
+    "ethers": "^6.13.1",
     "hardhat": "^2.22.5",
     "hardhat-deploy": "^0.12.4",
     "hardhat-deploy-ethers": "^0.4.2",
