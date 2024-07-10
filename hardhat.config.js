@@ -15,12 +15,12 @@ module.exports = {
           // gasPrice: 130000000000, 
            
       },
-      sepolia: {
-          url: SEPOLIA_RPC_URL,
-          accounts: [PRIVATE_KEY],
-          chainId: 11155111,
-          blockConfirmations: 6,
-      },
+    //   sepolia: {
+    //       url: SEPOLIA_RPC_URL,
+    //       accounts: [PRIVATE_KEY],
+    //       chainId: 11155111,
+    //       blockConfirmations: 6,
+    //   },
   },
   solidity: {
       compilers: [

@@ -5,9 +5,11 @@ contract ElectoralBond {
     mapping(string => address) private s_partyToWalletMap;
     mapping(string => uint) private s_partyBalances;
     mapping(address => string[]) private s_partyRemarks;
-
     
-    event RemarkLeft(address indexed partyAddress, string partyName, string remark);
+    // Mapping to keep track of individual user contributions to a party
+    mapping(string => mapping(address => uint)) private userContributions;
+    
+    event RemarkLeft(address indexed partyAddress, string partyName, string remark, address indexed userAddress);
 
     function transferBond(string memory partyName, uint amount) public payable {
         address to = s_partyToWalletMap[partyName];
@@ -15,15 +17,20 @@ contract ElectoralBond {
         require(msg.value >= amount && amount > 0, "Insufficient or zero Ether sent");
 
         s_partyBalances[partyName] += amount;
+        userContributions[partyName][msg.sender] += amount; // Track contribution per user
         payable(to).transfer(amount);
     }
 
-    function mapAddress(string memory partyName, address walletAddress) public {
-        s_partyToWalletMap[partyName] = walletAddress;
-    }
+    function useFunds(string memory partyName, uint amount, string memory remark, address userAddress) public {
+        address partyAddress = s_partyToWalletMap[partyName];
+        require(msg.sender == partyAddress, "Only the registered party can use these funds");
+        require(userContributions[partyName][userAddress] >= amount, "Insufficient balance from this user");
 
-    function changeWalletAddress(string memory partyName, address changedWalletAddress) public {
-        s_partyToWalletMap[partyName] = changedWalletAddress;
+        s_partyBalances[partyName] -= amount;
+        userContributions[partyName][userAddress] -= amount; // Deduct the used amount from the user's contribution
+        s_partyRemarks[partyAddress].push(remark);
+
+        emit RemarkLeft(partyAddress, partyName, remark, userAddress);
     }
 
     function getWalletAddress(string memory partyName) public view returns (address) {
@@ -34,21 +41,7 @@ contract ElectoralBond {
         return s_partyBalances[partyName];
     }
 
-   
-    function useFunds(string memory partyName, uint amount, string memory remark) public {
-        address partyAddress = s_partyToWalletMap[partyName];
-        require(msg.sender == partyAddress, "Only the registered party can use these funds");
-        require(s_partyBalances[partyName] >= amount, "Insufficient balance");
-
-        s_partyBalances[partyName] -= amount;
-        s_partyRemarks[partyAddress].push(remark);
-
-        
-        emit RemarkLeft(partyAddress, partyName, remark);
-    }
-
-    
-    function getRemarks(address partyAddress) public view returns (string[] memory) {
-        return s_partyRemarks[partyAddress];
+    function getUserContribution(string memory partyName, address user) public view returns (uint) {
+        return userContributions[partyName][user];
     }
 }

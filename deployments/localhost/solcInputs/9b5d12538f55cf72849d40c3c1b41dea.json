@@ -1,0 +1,35 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/ElectoralBond.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.7;\n\ncontract ElectoralBond {\n    mapping(string => address) private s_partyToWalletMap;\n    mapping(string => uint) private s_partyBalances;\n    mapping(address => string[]) private s_partyRemarks;\n\n    \n    event RemarkLeft(address indexed partyAddress, string partyName, string remark);\n\n    function transferBond(string memory partyName, uint amount) public payable {\n        address to = s_partyToWalletMap[partyName];\n        require(to != address(0), \"Party not registered\");\n        require(msg.value >= amount && amount > 0, \"Insufficient or zero Ether sent\");\n\n        s_partyBalances[partyName] += amount;\n        payable(to).transfer(amount);\n    }\n\n    function mapAddress(string memory partyName, address walletAddress) public {\n        s_partyToWalletMap[partyName] = walletAddress;\n    }\n\n    function changeWalletAddress(string memory partyName, address changedWalletAddress) public {\n        s_partyToWalletMap[partyName] = changedWalletAddress;\n    }\n\n    function getWalletAddress(string memory partyName) public view returns (address) {\n        return s_partyToWalletMap[partyName];\n    }\n\n    function getPartyBalance(string memory partyName) public view returns (uint) {\n        return s_partyBalances[partyName];\n    }\n\n   \n    function useFunds(string memory partyName, uint amount, string memory remark) public {\n        address partyAddress = s_partyToWalletMap[partyName];\n        require(msg.sender == partyAddress, \"Only the registered party can use these funds\");\n        require(s_partyBalances[partyName] >= amount, \"Insufficient balance\");\n\n        s_partyBalances[partyName] -= amount;\n        s_partyRemarks[partyAddress].push(remark);\n\n        \n        emit RemarkLeft(partyAddress, partyName, remark);\n    }\n\n    \n    function getRemarks(address partyAddress) public view returns (string[] memory) {\n        return s_partyRemarks[partyAddress];\n    }\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": false,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}
